@@ -77,6 +77,9 @@ public class Controller {
 	 * @return true if verify ok else false
 	 */
 	public boolean modifyData(Map data,boolean AutoCommit, List<String> log){
+		// Validation
+
+
 		Model.ModifyResult result = model.modifyData(data, AutoCommit);
 
 		if (result == Model.ModifyResult.Error) {
@@ -85,9 +88,9 @@ public class Controller {
 		}
 
 		if (result == Model.ModifyResult.InsertOccured) {
-			log.add("Added person");
+			log.add("insert occured");
 		} else {
-			log.add("Updated 1 Person");
+			log.add("update occured");
 		}
 
 		return true;
