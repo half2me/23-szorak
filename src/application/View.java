@@ -95,8 +95,8 @@ public class View {
 
 
 	// Titles and map keys of table columns search
-	String searchColumnTitles[] = new String[] { "COL1", "COL2", "COL3", "COL4" };
-	String searchColumnKeys[] = new String[] { "col1", "col2", "col3", "col4" };
+	String searchColumnTitles[] = new String[] { "Name", "Address", "Phone" };
+	String searchColumnKeys[] = new String[] { "name", "address", "phone", };
 
 	// Titles and map keys of table columns statistics
 	String statisticsColumnTitles[] = new String[] { "COL1", "COL2", "COL3"};
@@ -131,7 +131,7 @@ public class View {
 			// Set map factory
 			column.setCellValueFactory(new MapValueFactory(searchColumnKeys[i]));
 			// Set width of table column
-			column.prefWidthProperty().bind(searchTable.widthProperty().divide(4));
+			column.prefWidthProperty().bind(searchTable.widthProperty().divide(searchColumnTitles.length));
 			// Add column to the table
 			searchTable.getColumns().add(column);
 		}
@@ -143,7 +143,7 @@ public class View {
 			// Set map factory
 			column.setCellValueFactory(new MapValueFactory(statisticsColumnKeys[i]));
 			// Set width of table column
-			column.prefWidthProperty().bind(statisticsTable.widthProperty().divide(3));
+			column.prefWidthProperty().bind(statisticsTable.widthProperty().divide(statisticsColumnTitles.length));
 			// Add column to the table
 			statisticsTable.getColumns().add(column);
 		}
@@ -207,22 +207,23 @@ public class View {
 		// Delete all the rows
 		allRows.clear();
 
-		// Add a new (sample) row to the table
-		String sampleRow[] = new String[] { "Sample 1", "Sample 2", "Sample 3", "Sample 4" };
+		// Search or list data:
+		List<String[]> result = controller.search(searchTextField.getText(), log);
 
-		// Create a map object from string array
-		Map<String, String> dataRow = new HashMap<>();
-		for (int i = 0; i < searchTable.getColumns().size(); i++) {
+		// Loop through results
+		for (String[] row : result) {
+			// Create a map object from string array
+			Map<String, String> dataRow = new HashMap<>();
+			for (int i = 0; i < searchTable.getColumns().size(); i++) {
+				dataRow.put(searchColumnKeys[i], row[i]);
+			}
 
-			dataRow.put(searchColumnKeys[i], sampleRow[i]);
+			// Add the row to the table
+			allRows.add(dataRow);
 
+			//and write it to gui
+			for (String string : log) logMsg(string);
 		}
-
-		// Add the row to the table
-		allRows.add(dataRow);
-
-		//and write it to gui
-		for (String string : log) logMsg(string);
 	}
 
 

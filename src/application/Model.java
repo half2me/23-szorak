@@ -185,10 +185,23 @@ public class Model {
 	 */
 	public ResultSet search(String keyword) {
 		try {
-			Statement s = connection.createStatement();
-			ResultSet places = s.executeQuery("SELECT * FROM places.igazolvanyok");
+			ResultSet places = null;
+			if (keyword == null) {
+				// No search string is specified we list everything
+				Statement s = connection.createStatement();
+				places = s.executeQuery("SELECT NAME, ADDRESS, PHONE FROM PLACES");
+			} else {
+				String query = "SELECT NAME, ADDRESS, PHONE FROM PLACES WHERE PLACES.NAME LIKE ?";
+				PreparedStatement ps = connection.prepareStatement(query);
+				ps.setString(1, keyword);
+				places = ps.executeQuery();
+			}
+			return places;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// !TODO: More user friendly error handling
+			// use 'error' String beginning of the error string
+			lastError = "error ".concat(e.toString());
+			return null;
 		}
 	}
 

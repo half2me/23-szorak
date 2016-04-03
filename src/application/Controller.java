@@ -50,6 +50,20 @@ public class Controller {
 	public List<String[]> search(String keyword, List<String> log){
 		List<String[]> result = new ArrayList<>();
 		//TODO Task 1
+		ResultSet r = model.search(keyword);
+
+		if (r != null) {
+			try {
+				while (r.next()) {
+					String [] row = {r.getString(1), r.getString(2), r.getString(3)};
+                    result.add(row);
+                }
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} else {
+			log.add(model.getLastError());
+		}
 		return result;
 	}
 
