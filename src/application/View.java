@@ -35,6 +35,13 @@ import javafx.stage.Stage;
 public class View {
 
 	public TextField person_id;
+	public TextField name;
+	public TextField address;
+	public TextField phone;
+	public TextField income;
+	public TextField hobby;
+	public TextField favouriteMovie;
+	public Label editStatusLabel;
 	private Controller controller;
 
 
@@ -178,8 +185,7 @@ public class View {
 		//Log container
 		List<String> log = new ArrayList<>();
 
-		// Controller connect method will do everything for us, just call
-		// it
+		// Controller connect method will do everything for us, just call it
 		if (controller.connect(usernameField.getText(), passwordField.getText(), log))
 		{
 			connectionStateLabel.setText("Connection created");
@@ -237,7 +243,25 @@ public class View {
 	@FXML
 	private void editEventHandler(ActionEvent event) {
 		List<String> log = new ArrayList<>();
-		//TODO task 2,3,4
+
+		Map<String, String> data = new HashMap<>();
+		data.put("person_id",		person_id.getText());
+		data.put("name", 			name.getText());
+		data.put("address", 		address.getText());
+		data.put("phone", 			phone.getText());
+		data.put("income", 			income.getText());
+		data.put("hobby", 			hobby.getText());
+		data.put("favourite_movie", favouriteMovie.getText());
+
+		boolean result = controller.modifyData(data, false, log);
+
+		if (result) {
+			editStatusLabel.setText("Success!");
+			editStatusLabel.setTextFill(Color.web("#009900"));
+		} else {
+			editStatusLabel.setText("Failed!");
+			editStatusLabel.setTextFill(Color.web("#990000"));
+		}
 		for (String string : log) logMsg(string);
 	}
 

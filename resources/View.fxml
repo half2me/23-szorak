@@ -114,27 +114,28 @@
 			    	<Label text="Person ID:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
 			    	<TextField fx:id="person_id" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
+					<Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+					<TextField fx:id="name" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
+					<Label text="Address:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+					<TextField fx:id="address" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+					<Label text="Phone:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+					<TextField fx:id="phone" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+					<Label text="Income:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+					<TextField fx:id="income" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+					<Label text="Hobby:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+					<TextField fx:id="hobby" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+					<Label text="Favourite movie:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+					<TextField fx:id="favouriteMovie" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
 			    
-			    <Label text="Sample:"
-			        GridPane.columnIndex="0" GridPane.rowIndex="2"/>			 	
-			    <ComboBox fx:id="comboSample" GridPane.columnIndex="1" GridPane.rowIndex="2">
-			      <items>
-			        <FXCollections fx:factory="observableArrayList">
-			          <String fx:value="Y" />
-			          <String fx:value="N" />
-			        </FXCollections>
-			      </items>
-			    </ComboBox>
-			    
-			    <HBox spacing="10" GridPane.columnSpan="2" GridPane.columnIndex="0" GridPane.rowIndex="3">
-
-						
-						<Button fx:id="commitButton" text="Commit" onAction="#commitEventHandler" disable="true"/>
-
-						
-						<Button fx:id="editButton" text="Edit" onAction="#editEventHandler" />
-
+			    <HBox spacing="10" GridPane.columnSpan="2" GridPane.columnIndex="0" GridPane.rowIndex="8">
+					<Button fx:id="commitButton" text="Commit" onAction="#commitEventHandler" disable="true"/>
+					<Button fx:id="editButton" text="Add" onAction="#editEventHandler" />
+					<Label fx:id="editStatusLabel" minWidth="200" minHeight="17" prefWidth="200" prefHeight="17" />
 				</HBox>
 			    
 				</GridPane>
