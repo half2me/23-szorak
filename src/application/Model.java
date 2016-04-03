@@ -217,43 +217,60 @@ public class Model {
 	 * @return Type of action has been performed
 	 */
 	public ModifyResult modifyData(Map data, boolean AutoCommit) {
-		String query =
-				"MERGE INTO PERSONS USING dual ON ( Persons.person_id = ? )" +
-				"WHEN MATCHED THEN UPDATE SET " +
+		String query = "SELECT COUNT(*) FROM PERSONS WHERE PERSONS.PERSON_ID = ?";
+		ModifyResult type = ModifyResult.Error;
+
+		try {
+			connection.setAutoCommit(AutoCommit);
+			PreparedStatement ps = connection.prepareStatement(query);
+			if ( !((String)data.get("person_id")).isEmpty() ) ps.setInt(1, Integer.parseInt((String)data.get("person_id")));
+			else ps.setNull(4, java.sql.Types.INTEGER);
+			ResultSet check = ps.executeQuery();
+			check.next();
+
+			if (Integer.parseInt(check.getString(1)) > 0) {
+				// Update
+				type = ModifyResult.UpdateOccured;
+				query = "UPDATE PERSONS SET " +
 						"Persons.name = ?, " +
 						"Persons.address = ?, " +
 						"Persons.phone = ?, " +
 						"Persons.income = ?, " +
 						"Persons.hobby = ?, " +
 						"Persons.favourite_movie = ? " +
-				"WHEN NOT MATCHED THEN INSERT VALUES (?, ?, ?, ?, ?, ?, ?)";
-		try {
-			connection.setAutoCommit(AutoCommit);
-			PreparedStatement ps = connection.prepareStatement(query);
-			ps.setInt(1, Integer.parseInt((String)data.get("person_id")));
-			ps.setString(2, (String)data.get("name"));
-			ps.setString(3, (String)data.get("address"));
-			ps.setString(4, (String)data.get("phone"));
-			ps.setString(5, (String)data.get("income"));
-			ps.setString(6, (String)data.get("hobby"));
-			ps.setString(7, (String)data.get("favourite_movie"));
-			ps.setInt(8, Integer.parseInt((String)data.get("person_id")));
-			ps.setString(9, (String)data.get("name"));
-			ps.setString(10, (String)data.get("address"));
-			ps.setString(11, (String)data.get("phone"));
-			ps.setString(12, (String)data.get("income"));
-			ps.setString(13, (String)data.get("hobby"));
-			ps.setString(14, (String)data.get("favourite_movie"));
-			int result = ps.executeUpdate();
-			if (result > 0) {
-				return ModifyResult.UpdateOccured;
+						"WHERE Persons.person_id = ?";
+				ps = connection.prepareStatement(query);
+				ps.setString(1, (String)data.get("name"));
+				ps.setString(2, (String)data.get("address"));
+				ps.setString(3, (String)data.get("phone"));
+				if ( !((String)data.get("income")).isEmpty() ) ps.setInt(4, Integer.parseInt((String)data.get("income")));
+				else ps.setNull(4, java.sql.Types.INTEGER);
+				ps.setString(5, (String)data.get("hobby"));
+				ps.setString(6, (String)data.get("favourite_movie"));
+				if ( !((String)data.get("person_id")).isEmpty() ) ps.setInt(7, Integer.parseInt((String)data.get("person_id")));
+				else ps.setNull(7, java.sql.Types.INTEGER);
 			} else {
-				return ModifyResult.InsertOccured;
+				// INSERT
+				type = ModifyResult.InsertOccured;
+				query = "INSERT INTO PERSONS VALUES (?, ?, ?, ?, ?, ?, ?)";
+				ps = connection.prepareStatement(query);
+				if ( !((String)data.get("person_id")).isEmpty() ) ps.setInt(1, Integer.parseInt((String)data.get("person_id")));
+				else ps.setNull(1, java.sql.Types.INTEGER);
+				ps.setString(2, (String)data.get("name"));
+				ps.setString(3, (String)data.get("address"));
+				ps.setString(4, (String)data.get("phone"));
+				if ( !((String)data.get("income")).isEmpty() ) ps.setInt(5, Integer.parseInt((String)data.get("income")));
+				else ps.setNull(5, java.sql.Types.INTEGER);
+				ps.setString(6, (String)data.get("hobby"));
+				ps.setString(7, (String)data.get("favourite_movie"));
 			}
+
+			ps.executeUpdate();
 		} catch (SQLException e) {
 			lastError = "error ".concat(e.toString());
 			return ModifyResult.Error;
 		}
+		return type;
 	}
 
 

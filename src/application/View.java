@@ -253,7 +253,7 @@ public class View {
 		data.put("hobby", 			hobby.getText());
 		data.put("favourite_movie", favouriteMovie.getText());
 
-		boolean result = controller.modifyData(data, false, log);
+		boolean result = controller.modifyData(data, true, log);
 
 		if (result) {
 			editStatusLabel.setText("Success!");
