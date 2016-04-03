@@ -146,11 +146,15 @@
 					<Label text="Favourite movie:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
 					<TextField fx:id="favouriteMovie" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
 			    
-			    <HBox spacing="10" GridPane.columnSpan="2" GridPane.columnIndex="0" GridPane.rowIndex="8">
-					<Button fx:id="commitButton" text="Commit" onAction="#commitEventHandler" disable="true"/>
-					<Button fx:id="editButton" text="Add" onAction="#editEventHandler" />
-					<Label fx:id="editStatusLabel" minWidth="200" minHeight="17" prefWidth="200" prefHeight="17" />
-				</HBox>
+					<HBox spacing="10" GridPane.columnSpan="2" GridPane.columnIndex="0" GridPane.rowIndex="8">
+						<Button fx:id="commitButton" text="Commit" onAction="#commitEventHandler"/>
+						<Button fx:id="editButton" text="Add" onAction="#editEventHandler" />
+						<Label fx:id="editStatusLabel" minWidth="200" minHeight="17" prefWidth="200" prefHeight="17" />
+					</HBox>
+
+					<Label text="Place ID:" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+					<TextField fx:id="placeId" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+					<Label text="(Fill out for transactional use!)" GridPane.columnIndex="2" GridPane.rowIndex="9"/>
 			    
 				</GridPane>
 				

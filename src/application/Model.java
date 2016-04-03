@@ -7,6 +7,7 @@
 
 package application;
 
+import com.sun.javafx.binding.IntegerConstant;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 
 import java.sql.*;
@@ -223,8 +224,7 @@ public class Model {
 		try {
 			connection.setAutoCommit(AutoCommit);
 			PreparedStatement ps = connection.prepareStatement(query);
-			if ( !((String)data.get("person_id")).isEmpty() ) ps.setInt(1, Integer.parseInt((String)data.get("person_id")));
-			else ps.setNull(4, java.sql.Types.INTEGER);
+			ps.setInt(1, Integer.parseInt((String)data.get("person_id")));
 			ResultSet check = ps.executeQuery();
 			check.next();
 
@@ -247,15 +247,13 @@ public class Model {
 				else ps.setNull(4, java.sql.Types.INTEGER);
 				ps.setString(5, (String)data.get("hobby"));
 				ps.setString(6, (String)data.get("favourite_movie"));
-				if ( !((String)data.get("person_id")).isEmpty() ) ps.setInt(7, Integer.parseInt((String)data.get("person_id")));
-				else ps.setNull(7, java.sql.Types.INTEGER);
+				ps.setInt(7, Integer.parseInt((String)data.get("person_id")));
 			} else {
 				// INSERT
 				type = ModifyResult.InsertOccured;
 				query = "INSERT INTO PERSONS VALUES (?, ?, ?, ?, ?, ?, ?)";
 				ps = connection.prepareStatement(query);
-				if ( !((String)data.get("person_id")).isEmpty() ) ps.setInt(1, Integer.parseInt((String)data.get("person_id")));
-				else ps.setNull(1, java.sql.Types.INTEGER);
+				ps.setInt(1, Integer.parseInt((String)data.get("person_id")));
 				ps.setString(2, (String)data.get("name"));
 				ps.setString(3, (String)data.get("address"));
 				ps.setString(4, (String)data.get("phone"));
@@ -266,6 +264,15 @@ public class Model {
 			}
 
 			ps.executeUpdate();
+
+			// Visit a place if listed
+			if (!((String)data.get("place_id")).isEmpty()) {
+				query = "INSERT INTO VISITS (PLACE_ID, PERSON_ID)VALUES (?, ?)";
+				ps = connection.prepareStatement(query);
+				ps.setInt(1, Integer.parseInt((String)data.get("place_id")));
+				ps.setInt(2, Integer.parseInt((String)data.get("person_id")));
+				ps.executeUpdate();
+			}
 		} catch (SQLException e) {
 			lastError = "error ".concat(e.toString());
 			return ModifyResult.Error;
@@ -280,7 +287,12 @@ public class Model {
 	 * @return True on success, false on fail
 	 */
 	public boolean commit() {
-		//TODO task 4
+		try {
+			connection.commit();
+		} catch (SQLException e) {
+			lastError = "error ".concat(e.toString());
+			return false;
+		}
 		return false;
 	}
 
@@ -288,7 +300,11 @@ public class Model {
 	 * Method for Exercise #4
 	 */
 	public void rollback(){
-		//TODO task 4
+		try {
+			connection.rollback();
+		} catch (SQLException e) {
+			lastError = "error ".concat(e.toString());
+		}
 	}
 
 	/**

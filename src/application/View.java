@@ -42,6 +42,7 @@ public class View {
 	public TextField favouriteMovie;
 	public Label editStatusLabel;
 	public ComboBox hobby;
+	public TextField placeId;
 	private Controller controller;
 
 
@@ -252,8 +253,9 @@ public class View {
 		data.put("income", 			income.getText());
 		data.put("hobby", 			hobby.getSelectionModel().getSelectedItem().toString());
 		data.put("favourite_movie", favouriteMovie.getText());
+		data.put("place_id", 		placeId.getText());
 
-		boolean result = controller.modifyData(data, true, log);
+		boolean result = controller.modifyData(data, placeId.getText().isEmpty(), log);
 
 		if (result) {
 			editStatusLabel.setText("Success!");
@@ -280,7 +282,13 @@ public class View {
 	@FXML
 	private void commitEventHandler(ActionEvent event) {
 		List<String> log = new ArrayList<>();
-		//TODO task 4
+		if (controller.commit(log)) {
+			editStatusLabel.setText("Committed!");
+			editStatusLabel.setTextFill(Color.web("#009900"));
+		} else {
+			editStatusLabel.setText("Rolled back!");
+			editStatusLabel.setTextFill(Color.web("#990000"));
+		}
 		for (String string : log) logMsg(string);
 	}
 

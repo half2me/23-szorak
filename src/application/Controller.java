@@ -78,35 +78,16 @@ public class Controller {
 	 */
 	public boolean modifyData(Map data,boolean AutoCommit, List<String> log){
 
-		// Begin Validation
-		if (!(((String)data.get("person_id")).matches("\\d+"))) {
-			log.add("field: person_id syntax error: Must be an integer!");
-			return false;
-		}
-		if (!(((String)data.get("name")).matches("([\\p{L}|\\s])+"))) {
-			log.add("field: name syntax error: Must be filled out with a string");
-			return false;
-		}
-		if (!(((String)data.get("phone")).matches("|^(\\+((\\d){2}\\-(\\d){2}){2}(\\d){3}\\-(\\d){4}\\-){1}"))) {
-			log.add("field: phone syntax error: Must be in the format: (+XX-YY-ZZZZ)!");
-			return false;
-		}
-		if (!(((String)data.get("income")).matches("\\d*"))) {
-			log.add("field: income syntax error: Must be an integer!");
-			return false;
-		} else if (!((String)data.get("income")).isEmpty()) {
-			int income = Integer.parseInt((String)data.get("income"));
-			if (income < 15000 || income > 200000000) {
-				log.add("field: person_id syntax error: Must be between 15000 and 200000000!");
-				return false;
-			}
-		}
-		// End Validation
+		if (!verifyData(data, log)) return false;
 
 		Model.ModifyResult result = model.modifyData(data, AutoCommit);
 
 		if (result == Model.ModifyResult.Error) {
 			log.add(model.getLastError());
+			if (!AutoCommit) {
+				model.rollback();
+				log.add("rollback occured");
+			}
 			return false;
 		}
 
@@ -140,8 +121,13 @@ public class Controller {
 	 * @return true if model.commit true else false
 	 */
 	public boolean commit(List<String> log){
-		if (model.commit()) return true;
+		if (model.commit()) {
+			log.add("commit ok");
+			return true;
+		}
 		log.add(model.lastError);
+		model.rollback();
+		log.add("rollback occured");
 		return false;
 	}
 
@@ -154,7 +140,34 @@ public class Controller {
 	 * @return true if all fields in Map is correct else false
 	 */
 	private boolean verifyData(Map data, List<String> log) {
-		//TODO task 3
+		// Begin Validation
+		if (!(((String)data.get("person_id")).matches("\\d+"))) {
+			log.add("field: person_id syntax error: Must be an integer!");
+			return false;
+		}
+		if (!(((String)data.get("name")).matches("([\\p{L}|\\s])+"))) {
+			log.add("field: name syntax error: Must be filled out with a string");
+			return false;
+		}
+		if (!(((String)data.get("phone")).matches("|^(\\+((\\d){2}\\-){2}(\\d){3}\\-(\\d){4}\\-){1}"))) {
+			log.add("field: phone syntax error: Must be in the format: (+XX-YY-ZZZZ)!");
+			return false;
+		}
+		if (!(((String)data.get("income")).matches("\\d*"))) {
+			log.add("field: income syntax error: Must be an integer!");
+			return false;
+		} else if (!((String)data.get("income")).isEmpty()) {
+			int income = Integer.parseInt((String)data.get("income"));
+			if (income < 15000 || income > 200000000) {
+				log.add("field: person_id syntax error: Must be between 15000 and 200000000!");
+				return false;
+			}
+		}
+		if (!(((String)data.get("place_id")).matches("|\\d+"))) {
+			log.add("field: place_id syntax error: Must be an integer!");
+			return false;
+		}
+		// End Validation
 		return true;
 	}
 
