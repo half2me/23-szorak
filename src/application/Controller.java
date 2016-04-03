@@ -87,7 +87,7 @@ public class Controller {
 			log.add("field: name syntax error: Must be filled out with a string");
 			return false;
 		}
-		if (!(((String)data.get("phone")).matches("(\\+((\\d){2}\\-(\\d){2}){2}(\\d){3}\\-(\\d){4}\\-)*"))) {
+		if (!(((String)data.get("phone")).matches("|^(\\+((\\d){2}\\-(\\d){2}){2}(\\d){3}\\-(\\d){4}\\-){1}"))) {
 			log.add("field: phone syntax error: Must be in the format: (+XX-YY-ZZZZ)!");
 			return false;
 		}
