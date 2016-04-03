@@ -122,12 +122,26 @@
 
 					<Label text="Phone:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
 					<TextField fx:id="phone" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+					<Label text="(+XX-YY-ZZZ-ZZZZ)" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
 
 					<Label text="Income:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
 					<TextField fx:id="income" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+					<Label text="(15000 - 200000000)" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
 
 					<Label text="Hobby:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-					<TextField fx:id="hobby" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+					<ComboBox fx:id="hobby" GridPane.columnIndex="1" GridPane.rowIndex="6">
+						<items>
+							<FXCollections fx:factory="observableArrayList">
+								<String fx:value=""/>
+								<String fx:value="mozi" />
+								<String fx:value="sport" />
+								<String fx:value="varrás" />
+							</FXCollections>
+						</items>
+						<value>
+							<String fx:value="" />
+						</value>
+					</ComboBox>
 
 					<Label text="Favourite movie:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
 					<TextField fx:id="favouriteMovie" GridPane.columnIndex="1" GridPane.rowIndex="7"/>

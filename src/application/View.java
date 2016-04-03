@@ -39,9 +39,9 @@ public class View {
 	public TextField address;
 	public TextField phone;
 	public TextField income;
-	public TextField hobby;
 	public TextField favouriteMovie;
 	public Label editStatusLabel;
+	public ComboBox hobby;
 	private Controller controller;
 
 
@@ -250,7 +250,7 @@ public class View {
 		data.put("address", 		address.getText());
 		data.put("phone", 			phone.getText());
 		data.put("income", 			income.getText());
-		data.put("hobby", 			hobby.getText());
+		data.put("hobby", 			hobby.getSelectionModel().getSelectedItem().toString());
 		data.put("favourite_movie", favouriteMovie.getText());
 
 		boolean result = controller.modifyData(data, true, log);

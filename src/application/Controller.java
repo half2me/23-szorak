@@ -77,8 +77,31 @@ public class Controller {
 	 * @return true if verify ok else false
 	 */
 	public boolean modifyData(Map data,boolean AutoCommit, List<String> log){
-		// Validation
 
+		// Begin Validation
+		if (!(((String)data.get("person_id")).matches("\\d+"))) {
+			log.add("field: person_id syntax error: Must be an integer!");
+			return false;
+		}
+		if (!(((String)data.get("name")).matches("([\\p{L}|\\s])+"))) {
+			log.add("field: name syntax error: Must be filled out with a string");
+			return false;
+		}
+		if (!(((String)data.get("phone")).matches("(\\+((\\d){2}\\-(\\d){2}){2}(\\d){3}\\-(\\d){4}\\-)*"))) {
+			log.add("field: phone syntax error: Must be in the format: (+XX-YY-ZZZZ)!");
+			return false;
+		}
+		if (!(((String)data.get("income")).matches("\\d*"))) {
+			log.add("field: income syntax error: Must be an integer!");
+			return false;
+		} else if (!((String)data.get("income")).isEmpty()) {
+			int income = Integer.parseInt((String)data.get("income"));
+			if (income < 15000 || income > 200000000) {
+				log.add("field: person_id syntax error: Must be between 15000 and 200000000!");
+				return false;
+			}
+		}
+		// End Validation
 
 		Model.ModifyResult result = model.modifyData(data, AutoCommit);
 
