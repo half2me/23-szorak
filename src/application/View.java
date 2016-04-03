@@ -108,10 +108,8 @@ public class View {
 	String searchColumnKeys[] = new String[] { "name", "address", "phone", };
 
 	// Titles and map keys of table columns statistics
-	String statisticsColumnTitles[] = new String[] { "COL1", "COL2", "COL3"};
-	String statisticsColumnKeys[] = new String[] { "col1", "col2", "col3" };
-
-
+	String statisticsColumnTitles[] = new String[] { "Person ID", "Person Name", "Place Name", "Place Type"};
+	String statisticsColumnKeys[] = new String[] { "person_id", "person_name", "place_name", "place_type" };
 
 	/**
 	 * View constructor
@@ -304,7 +302,28 @@ public class View {
 	@FXML
 	private void statisticsEventHandler(ActionEvent event) {
 		List<String> log = new ArrayList<>();
-		//TODO task 5
+
+		// Get a reference to the row list of search table
+		ObservableList<Map> allRows = statisticsTable.getItems();
+
+		// Delete all the rows
+		allRows.clear();
+
+		// Search or list data:
+		List<String[]> result = controller.getStatistics(log);
+
+		// Loop through results
+		for (String[] row : result) {
+			// Create a map object from string array
+			Map<String, String> dataRow = new HashMap<>();
+			for (int i = 0; i < statisticsTable.getColumns().size(); i++) {
+				dataRow.put(statisticsColumnKeys[i], row[i]);
+			}
+			// Add the row to the table
+			allRows.add(dataRow);
+		}
+
+		//and write it to gui
 		for (String string : log) logMsg(string);
 	}
 

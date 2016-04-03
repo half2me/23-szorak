@@ -313,9 +313,21 @@ public class Model {
 	 * @return Result of the query
 	 */
 	public ResultSet getStatistics() {
-		//TODO task 5
-		return null;
-
+		String query = "SELECT DISTINCT PERSONS.PERSON_ID, PERSONS.NAME, PLACES.NAME, PLACES.PLACE_TYPE " +
+				"FROM PERSONS, PLACES, VISITS " +
+				"WHERE " +
+				"PERSONS.PERSON_ID = VISITS.PERSON_ID AND " +
+				"PLACES.PLACE_ID = VISITS.PLACE_ID AND " +
+				"LOWER(PLACES.PLACE_TYPE) LIKE '%diszkó%' AND " +
+				"VISITS.LAST_VISIT - VISITS.FIRST_VISIT > (4*365 + 365/2 + 1) " +
+				"ORDER BY PERSONS.NAME";
+		try {
+			Statement s = connection.createStatement();
+			return s.executeQuery(query);
+		} catch (SQLException e) {
+			lastError = "error ".concat(e.toString());
+			return null;
+		}
 	}
 
 }

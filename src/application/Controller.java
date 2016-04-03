@@ -51,7 +51,6 @@ public class Controller {
 		List<String[]> result = new ArrayList<>();
 		//TODO Task 1
 		ResultSet r = model.search(keyword);
-		log.add(model.getLastError());
 
 		if (r != null) {
 			try {
@@ -110,7 +109,20 @@ public class Controller {
 	 */
 	public List<String[]> getStatistics(List<String> log){
 		List<String[]> result = new ArrayList<>();
-		//TODO task 5
+		ResultSet r = model.getStatistics();
+
+		if (r != null) {
+			try {
+				while (r.next()) {
+					String [] row = {r.getString(1), r.getString(2), r.getString(3), r.getString(4)};
+					result.add(row);
+				}
+			} catch (SQLException e) {
+				log.add(e.getMessage());
+			}
+		} else {
+			log.add(model.getLastError());
+		}
 		return result;
 	}
 
