@@ -34,6 +34,7 @@ import javafx.stage.Stage;
 // Controller class
 public class View {
 
+	public TextField person_id;
 	private Controller controller;
 
 
@@ -119,8 +120,8 @@ public class View {
 
 		// Clear username and password textfields and display status
 		// 'disconnected'
-		usernameField.setText("");
-		passwordField.setText("");
+		usernameField.setText("a7twos");
+		passwordField.setText("dba");
 		connectionStateLabel.setText("Connection: disconnected");
 		connectionStateLabel.setTextFill(Color.web("#ee0000"));
 
@@ -217,13 +218,12 @@ public class View {
 			for (int i = 0; i < searchTable.getColumns().size(); i++) {
 				dataRow.put(searchColumnKeys[i], row[i]);
 			}
-
 			// Add the row to the table
 			allRows.add(dataRow);
-
-			//and write it to gui
-			for (String string : log) logMsg(string);
 		}
+
+		//and write it to gui
+		for (String string : log) logMsg(string);
 	}
 
 

@@ -7,8 +7,11 @@
 
 package application;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
+
 import java.sql.*;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 // Model class
@@ -186,14 +189,14 @@ public class Model {
 	public ResultSet search(String keyword) {
 		try {
 			ResultSet places = null;
-			if (keyword == null) {
+			if (keyword == null || keyword.equals("")) {
 				// No search string is specified we list everything
 				Statement s = connection.createStatement();
 				places = s.executeQuery("SELECT NAME, ADDRESS, PHONE FROM PLACES");
 			} else {
-				String query = "SELECT NAME, ADDRESS, PHONE FROM PLACES WHERE PLACES.NAME LIKE ?";
+				String query = "SELECT NAME, ADDRESS, PHONE FROM PLACES WHERE LOWER(PLACES.NAME) LIKE ?";
 				PreparedStatement ps = connection.prepareStatement(query);
-				ps.setString(1, keyword);
+				ps.setString(1, "%" + keyword.toLowerCase() + "%");
 				places = ps.executeQuery();
 			}
 			return places;
@@ -214,10 +217,43 @@ public class Model {
 	 * @return Type of action has been performed
 	 */
 	public ModifyResult modifyData(Map data, boolean AutoCommit) {
-		ModifyResult result = ModifyResult.Error;
-		//TODO task 2,3,4.1
-		return result;
-
+		String query =
+				"MERGE INTO PERSONS USING dual ON ( Persons.person_id = ? )" +
+				"WHEN MATCHED THEN UPDATE SET " +
+						"Persons.name = ?, " +
+						"Persons.address = ?, " +
+						"Persons.phone = ?, " +
+						"Persons.income = ?, " +
+						"Persons.hobby = ?, " +
+						"Persons.favourite_movie = ? " +
+				"WHEN NOT MATCHED THEN INSERT VALUES (?, ?, ?, ?, ?, ?, ?)";
+		try {
+			connection.setAutoCommit(AutoCommit);
+			PreparedStatement ps = connection.prepareStatement(query);
+			ps.setInt(1, Integer.parseInt((String)data.get("person_id")));
+			ps.setString(2, (String)data.get("name"));
+			ps.setString(3, (String)data.get("address"));
+			ps.setString(4, (String)data.get("phone"));
+			ps.setString(5, (String)data.get("income"));
+			ps.setString(6, (String)data.get("hobby"));
+			ps.setString(7, (String)data.get("favourite_movie"));
+			ps.setInt(8, Integer.parseInt((String)data.get("person_id")));
+			ps.setString(9, (String)data.get("name"));
+			ps.setString(10, (String)data.get("address"));
+			ps.setString(11, (String)data.get("phone"));
+			ps.setString(12, (String)data.get("income"));
+			ps.setString(13, (String)data.get("hobby"));
+			ps.setString(14, (String)data.get("favourite_movie"));
+			int result = ps.executeUpdate();
+			if (result > 0) {
+				return ModifyResult.UpdateOccured;
+			} else {
+				return ModifyResult.InsertOccured;
+			}
+		} catch (SQLException e) {
+			lastError = "error ".concat(e.toString());
+			return ModifyResult.Error;
+		}
 	}
 
 

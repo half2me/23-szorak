@@ -51,6 +51,7 @@ public class Controller {
 		List<String[]> result = new ArrayList<>();
 		//TODO Task 1
 		ResultSet r = model.search(keyword);
+		log.add(model.getLastError());
 
 		if (r != null) {
 			try {
@@ -59,7 +60,7 @@ public class Controller {
                     result.add(row);
                 }
 			} catch (SQLException e) {
-				e.printStackTrace();
+				log.add(e.getMessage());
 			}
 		} else {
 			log.add(model.getLastError());
@@ -76,8 +77,19 @@ public class Controller {
 	 * @return true if verify ok else false
 	 */
 	public boolean modifyData(Map data,boolean AutoCommit, List<String> log){
-		Model.ModifyResult result = Model.ModifyResult.Error;
-		//TODO Task 2,3,4.1
+		Model.ModifyResult result = model.modifyData(data, AutoCommit);
+
+		if (result == Model.ModifyResult.Error) {
+			log.add(model.getLastError());
+			return false;
+		}
+
+		if (result == Model.ModifyResult.InsertOccured) {
+			log.add("Added person");
+		} else {
+			log.add("Updated 1 Person");
+		}
+
 		return true;
 
 	}
