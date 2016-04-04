@@ -49,7 +49,6 @@ public class Controller {
 	 */
 	public List<String[]> search(String keyword, List<String> log){
 		List<String[]> result = new ArrayList<>();
-		//TODO Task 1
 		ResultSet r = model.search(keyword);
 
 		if (r != null) {

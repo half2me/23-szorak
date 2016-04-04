@@ -289,11 +289,11 @@ public class Model {
 	public boolean commit() {
 		try {
 			connection.commit();
+			return true;
 		} catch (SQLException e) {
 			lastError = "error ".concat(e.toString());
 			return false;
 		}
-		return false;
 	}
 
 	/**
