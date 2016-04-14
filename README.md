@@ -1,5 +1,5 @@
-# jdbc-demo
-JDBC demo application for the Databases Laboratory course
+# JDBC Labor - 23-SZORAK
+Megoldásom a 23-SZORAK feladatra.
 
 ## Usage
 
